@@ -32,25 +32,25 @@ public class FileHelper {
 
 
 
-    private static File initBackupsFolder(){
-        File backupsFolder = new File(Const.BACKUPS_FOLDER);
-        if(!backupsFolder.exists()){
-            backupsFolder.mkdirs();
-        }
-        return backupsFolder;
-    }
+  
+
+   
+
+    public boolean writeData(File file,List<ShoesSimple> shoesSimpleList) throws IOException {
 
 
-    public File writeData(List<ShoesSimple> shoesSimpleList) throws IOException {
-        File derectory = initBackupsFolder();
-        File file = new File(Const.BACKUPS_FILE);
-        writeData(file,shoesSimpleList);
-        return file;
-    }
-
-
-    private void writeData(File file,List<ShoesSimple> shoesSimpleList) throws IOException {
-
+    	if(!file.exists()){
+    		File derectory = file.getParentFile();
+    		if(!derectory.exists()){
+    			if(!derectory.mkdirs()){
+    				return false;
+    			}
+    		}
+    		if(!file.createNewFile()){
+    			return false;
+    		}
+    	}
+    	
         StringBuilder sb = new StringBuilder();
 
         for(int i=0;i<shoesSimpleList.size();i++){
@@ -75,13 +75,13 @@ public class FileHelper {
         out.flush();
         out.close();
         in.close();
+        
+        return true;
     }
 
  
 
-    public List<ShoesSimple> getData() throws IOException {
-
-        File file = new File(Const.BACKUPS_FILE);
+    public List<ShoesSimple> getData(File file) throws IOException {
         if(!file.exists()){
         	return null;
         }

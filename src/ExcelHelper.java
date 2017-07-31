@@ -29,23 +29,23 @@ public class ExcelHelper {
 
 	//横 为行column 
 	private static final int SHOES_MAX_COLUMN_COUNT = 5;
-	private static File initMainFolder(){
-		File mainFolder = new File(Const.MAIN_FOLDER);
-		if(!mainFolder.exists()){
-			mainFolder.mkdirs();
+	
+
+	
+
+	public static boolean createExcel(File derectory,List<ShoesSimple> shoesSimpleList) throws WriteException, IOException {
+
+		if(!derectory.exists()){
+			if(!derectory.mkdirs()){
+				return false;
+			}
 		}
-		return mainFolder;
-	}
-
-	public static void createExcel(List<ShoesSimple> shoesSimpleList) throws IOException, WriteException {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日_HH时mm分ss秒SSS毫秒");
-		File file = new File(initMainFolder().getAbsolutePath(),"Excel"+format.format(new Date())+".xls"  );
-		createExcel(file,shoesSimpleList);
-
-	}
-
-	public static void createExcel(File file,List<ShoesSimple> shoesSimpleList) throws WriteException, IOException {
-
+		File file = new File(derectory,"Excel"+format.format(new Date())+".xls"  );
+	
+		
+		
+		
 		WritableWorkbook workbook = Workbook.createWorkbook(file);
 		WritableSheet sheet = workbook.createSheet("DemoExcel", 0);
 		  
@@ -93,10 +93,13 @@ public class ExcelHelper {
 			 int column;  //控制x轴
 			 if(currentShoesColumnCount==0){
 				 column = 0;
-				 sheet.setColumnView(1, 20);  
+				 sheet.setColumnView(1, 16);  
+				 sheet.setColumnView(0, 6);  
 			 }else{
 				 column = (currentShoesColumnCount)*2;
-				 sheet.setColumnView((currentShoesColumnCount)*2+1, 20);  
+				 sheet.setColumnView((currentShoesColumnCount)*2+1, 16); 
+				 
+				 sheet.setColumnView((currentShoesColumnCount)*2, 6);  
 			 }
 			 
 			
@@ -106,7 +109,7 @@ public class ExcelHelper {
 			 if(currentShoesRowCount==0){
 				 row0 = 2;
 			 }else{
-				 row0 = (currentShoesRowCount)*9+2;
+				 row0 = (currentShoesRowCount)*6+2;
 			 }
 			 
 			 
@@ -175,6 +178,8 @@ public class ExcelHelper {
 		   
 		 workbook.write();   
 		 workbook.close();   
+		 
+		 return true;
 
 	}
 }
